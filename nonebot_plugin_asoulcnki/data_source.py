@@ -3,16 +3,15 @@ import time
 import httpx
 import base64
 import jinja2
-from pathlib import Path
+import pkgutil
 from nonebot.adapters.cqhttp import Message, MessageSegment
 
 from .browser import get_new_page
 from .diff import diff_text
 
-dir_path = Path(__file__).parent
-template_path = dir_path / 'template'
-env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_path),
-                         enable_async=True)
+env = jinja2.Environment(enable_async=True)
+article_data = pkgutil.get_data(__name__, "templates/article.html").decode()
+article_tpl = env.from_string(article_data)
 
 
 async def check_text(text):
@@ -59,8 +58,7 @@ async def check_text(text):
 
 
 async def create_image(article):
-    template = env.get_template('article.html')
-    content = await template.render_async(article=article)
+    content = await article_tpl.render_async(article=article)
     async with get_new_page(viewport={"width": 500, "height": 100}) as page:
         await page.set_content(content)
         img = await page.screenshot(full_page=True)
