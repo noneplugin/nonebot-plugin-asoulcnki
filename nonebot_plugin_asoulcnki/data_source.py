@@ -1,9 +1,9 @@
 import json
 import time
 import httpx
-import base64
 import jinja2
 import pkgutil
+from nonebot.log import logger
 from nonebot.adapters.cqhttp import Message, MessageSegment
 
 from .browser import get_new_page
@@ -14,7 +14,7 @@ article_data = pkgutil.get_data(__name__, "templates/article.html").decode()
 article_tpl = env.from_string(article_data)
 
 
-async def check_text(text):
+async def check_text(text) -> Message:
     try:
         url = 'https://asoulcnki.asia/v1/api/check'
         async with httpx.AsyncClient() as client:
@@ -49,17 +49,21 @@ async def check_text(text):
 
         msg = Message()
         msg.append('总复制比 {:.2f}%'.format(rate * 100))
-        msg.append(MessageSegment.image(
-            f"base64://{base64.b64encode(image).decode()}"))
+        msg.append(MessageSegment.image(image))
         msg.append(f'链接：{reply_url}')
         return msg
-    except:
+    except Exception as e:
+        logger.warning(f"Error in check_text: {e}")
         return None
 
 
-async def create_image(article):
-    content = await article_tpl.render_async(article=article)
-    async with get_new_page(viewport={"width": 500, "height": 100}) as page:
-        await page.set_content(content)
-        img = await page.screenshot(full_page=True)
-    return img
+async def create_image(article) -> bytes:
+    try:
+        content = await article_tpl.render_async(article=article)
+        async with get_new_page(viewport={"width": 500, "height": 100}) as page:
+            await page.set_content(content)
+            img = await page.screenshot(full_page=True)
+        return img
+    except Exception as e:
+        logger.warning(f"Error in create_image: {e}")
+        return None
