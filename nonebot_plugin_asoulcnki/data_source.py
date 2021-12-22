@@ -5,8 +5,8 @@ import jinja2
 import pkgutil
 from nonebot.log import logger
 from nonebot.adapters.cqhttp import Message, MessageSegment
+from nonebot_plugin_htmlrender import html_to_pic
 
-from .browser import get_new_page
 from .diff import diff_text
 
 env = jinja2.Environment(enable_async=True)
@@ -60,10 +60,7 @@ async def check_text(text) -> Message:
 async def create_image(article) -> bytes:
     try:
         content = await article_tpl.render_async(article=article)
-        async with get_new_page(viewport={"width": 500, "height": 100}) as page:
-            await page.set_content(content)
-            img = await page.screenshot(full_page=True)
-        return img
+        return await html_to_pic(content, wait=0, viewport={"width": 500, "height": 100})
     except Exception as e:
         logger.warning(f"Error in create_image: {e}")
         return None
