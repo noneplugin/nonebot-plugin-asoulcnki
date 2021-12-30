@@ -27,12 +27,6 @@ nb plugin install nonebot_plugin_asoulcnki
 pip install nonebot_plugin_asoulcnki
 ```
 
-由于用到了 playwright，使用前务必先安装无头浏览器
-
-```
-playwright install chromium
-```
-
 
 ### 示例
 
