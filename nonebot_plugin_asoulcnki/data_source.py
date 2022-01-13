@@ -4,7 +4,7 @@ import jinja2
 import random
 import pkgutil
 from nonebot.log import logger
-from nonebot.adapters.cqhttp import Message, MessageSegment
+from nonebot.adapters.onebot.v11 import Message, MessageSegment
 from nonebot_plugin_htmlrender import html_to_pic
 
 from .diff import diff_text

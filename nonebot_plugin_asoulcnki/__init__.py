@@ -1,6 +1,6 @@
 from nonebot import on_command
-from nonebot.typing import T_State
-from nonebot.adapters.cqhttp import Bot, MessageEvent
+from nonebot.params import CommandArg
+from nonebot.adapters.onebot.v11 import MessageEvent, Message
 
 from .data_source import check_text, random_text
 
@@ -19,15 +19,16 @@ __example__ = '''
 __usage__ = f'{__des__}\nUsage:\n{__cmd__}\nExample:\n{__example__}'
 
 
-asoulcnki = on_command('asoulcnki', aliases={'枝网查重', '查重'}, priority=13)
+asoulcnki = on_command('asoulcnki', aliases={'枝网查重', '查重'},
+                       block=True, priority=13)
 
 
 @asoulcnki.handle()
-async def _(bot: Bot, event: MessageEvent, state: T_State):
-    text = event.get_plaintext().strip()
+async def _(event: MessageEvent, msg: Message = CommandArg()):
+    text = msg.extract_plain_text().strip()
     if not text:
         if event.reply:
-            reply = event.reply.message.extract_plain_text()
+            reply = event.reply.message.extract_plain_text().strip()
             if reply:
                 text = reply
 
@@ -46,12 +47,13 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
         await asoulcnki.finish('出错了，请稍后再试')
 
 
-article = on_command('小作文', aliases={'随机小作文', '发病小作文'}, priority=13)
+article = on_command('小作文', aliases={'随机小作文', '发病小作文'},
+                     block=True, priority=13)
 
 
 @article.handle()
-async def _(bot: Bot, event: MessageEvent, state: T_State):
-    keyword = event.get_plaintext().strip()
+async def _(msg: Message = CommandArg()):
+    keyword = msg.extract_plain_text().strip()
 
     msg = await random_text(keyword)
     if msg:
