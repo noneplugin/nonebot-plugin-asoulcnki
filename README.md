@@ -6,6 +6,8 @@ NoneBot 枝网查重插件
 
 ### 使用方式
 
+**以下命令需要加[命令前缀](https://v2.nonebot.dev/docs/api/config#Config-command_start) (默认为`/`)，可自行设置为空**
+
 - 查重/枝网查重 + 要查重的小作文
 
 - 回复需要查重的内容，回复“查重”
