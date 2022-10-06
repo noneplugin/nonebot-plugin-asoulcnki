@@ -4,6 +4,8 @@ NoneBot 枝网查重插件
 
 利用 [枝网查重](https://asoulcnki.asia/) 查找最相似的小作文，为防止文字太长刷屏，将内容转换为图片形式发出
 
+由于枝网项目组已停止活动，本插件已不可用。[关于枝网项目组暂时停止活动的公告](https://t.bilibili.com/658607344806002729)
+
 ### 使用方式
 
 **以下命令需要加[命令前缀](https://v2.nonebot.dev/docs/api/config#Config-command_start) (默认为`/`)，可自行设置为空**
